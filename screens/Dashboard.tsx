@@ -9,6 +9,7 @@ import {Container} from "../components/shared";
 import {colors} from "../components/colors";
 import {StyleSheet, View,Text } from "react-native";
 import Navbar from "../components/Navbar";
+import * as Brightness from 'expo-brightness';
 
 
 const DashBoardContainer = styled(Container)`
@@ -33,11 +34,25 @@ bottom: 10%;
 
 const Dashboard: FunctionComponent = () => {
   let DeviceManufacturer = Device.manufacturer;
+  let DeviceYearClass = Device.deviceYearClass;
+  let DeviceModelName = Device.modelName;
+  let DeviceBrand = Device.brand;
+  
   const [batteryLevel,setBatteryLevel] = useState("0");
+  const [mainScreenBrightness,setMainScreenBrightness] = useState("0");
 
   useEffect(()=>{
     batteryLevelFunction()
+    BrightnessLevelFunction()
   })
+
+  const BrightnessLevelFunction = async() => {
+    let brightness = await Brightness.getBrightnessAsync()
+      brightness = Math.round(brightness * 100) / 100
+      let stringbrightness = brightness.toString()  
+      let formatedString = stringbrightness.split('.')
+      setMainScreenBrightness("%" +formatedString[1]);
+  }
 
   const batteryLevelFunction = async() =>
     { 
@@ -56,7 +71,12 @@ const Dashboard: FunctionComponent = () => {
           <Navbar systUnderline={false} hardUnderline={false} dashUnderline={true}/>
           <MainContainer>
           <Text style={styles.placeholder}>Device Manufacturer: {DeviceManufacturer}</Text>
+          <Text style={styles.placeholder}>Device Brand: {DeviceBrand}</Text>
+          <Text style={styles.placeholder}>Device Model Name: {DeviceModelName}</Text>
+          <Text style={styles.placeholder}>Year class: {DeviceYearClass}</Text>
           <Text style={styles.placeholder}>Battery Level: {batteryLevel}</Text>
+          <Text style={styles.placeholder}>Main Screen Brightness level: {mainScreenBrightness}</Text>
+          
           
           </MainContainer>
           
