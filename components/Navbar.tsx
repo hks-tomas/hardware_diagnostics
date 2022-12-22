@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 30,
         color:colors.red,
+        textDecorationLine: 'underline',
     },
     titleText: {
       fontSize: 30,
