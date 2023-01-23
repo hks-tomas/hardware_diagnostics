@@ -21,13 +21,6 @@ interface Props{
     
 }
 
-
-
-
-
-
-
-
 const TopSection = styled(View)`
 width: 100%;
 flex: 1;
@@ -50,7 +43,7 @@ const Navbar = ({dashUnderline,hardUnderline,systUnderline}: Props ) => {
         <Text onPress={() => navigation.navigate('Dashboard', {
         screen: 'Feed',
         params: { sort: 'latest' },
-})} style={[dashUnderline ? styles.baseTextSelected : styles.baseText ]} >Dashboard</Text>
+})} style={[dashUnderline ? styles.baseTextSelected : styles.baseText ]}>Dashboard</Text>
         <Text onPress={() => navigation.navigate('Hardware', {
         screen: 'Feed',
         params: { sort: 'latest' },
@@ -68,13 +61,13 @@ const Navbar = ({dashUnderline,hardUnderline,systUnderline}: Props ) => {
 const styles = StyleSheet.create({
     baseText: {
       fontSize: 20,
-      margin: 30,
+      margin: 25,
       
     },
 
     baseTextSelected:{
         fontSize: 20,
-        margin: 30,
+        margin: 25,
         color:colors.red,
         textDecorationLine: 'underline',
     },

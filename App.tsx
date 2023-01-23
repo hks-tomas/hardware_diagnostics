@@ -13,9 +13,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Dashboard">
-        <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen name="Hardware" component={Hardware} />
-        <Stack.Screen name="System" component={System} />
+        <Stack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
+        <Stack.Screen options={{ headerShown: false }} name="Hardware" component={Hardware} />
+        <Stack.Screen options={{ headerShown: false }} name="System" component={System} />
       </Stack.Navigator>
     </NavigationContainer>
     

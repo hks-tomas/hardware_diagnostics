@@ -24,12 +24,8 @@ background-color: ${colors.primary};
 justify-content: space-between;
 width: 100%;
 height: 100%;
-bottom: 10%;
+bottom: 5%;
 `;
-
-
-
-
 
 
 const Dashboard: FunctionComponent = () => {

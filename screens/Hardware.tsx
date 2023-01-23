@@ -7,6 +7,7 @@ import {Container} from "../components/shared";
 import {colors} from "../components/colors";
 import {StyleSheet, View,Text } from "react-native";
 import Navbar from "../components/Navbar";
+import { getDeviceType } from "react-native-device-info";
 
 
 const HardwareContainer = styled(Container)`
@@ -25,16 +26,22 @@ height: 100%;
 
 
 
+
+
 const Hardware: FunctionComponent = () => {
-    return(
+
+  //const deviceType = getDeviceType()
+  //<Text style={styles.placeholder}>Device Manufacturer: {deviceType}</Text>
+
+  return(
         <>
         <StatusBar style="light"/>
         <HardwareContainer>
           <Navbar systUnderline={false} hardUnderline={true} dashUnderline={false}/>
           <MainContainer>
           <Text style={styles.placeholder}>THIS IS A PLACEHOLDER</Text>
-          </MainContainer>
-          
+        </MainContainer>
+        
         </HardwareContainer>
         </>
     );
