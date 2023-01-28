@@ -25,7 +25,7 @@ const TopSection = styled(View)`
 width: 100%;
 flex: 1;
 top:15%;
-max-height:30%;
+max-height:27%;
 background-color: ${colors.gray};
 justify-content:center;
 flex-direction:row;

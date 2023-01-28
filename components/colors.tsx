@@ -8,4 +8,7 @@ export const colors = {
     graydark:"#4b5563",
     accent:"#fbcd77",
     red:"#FF0000",
+    blue:"#0000FF",
+    green:"#00FF00",
+    blueSky:"#87CEEB",
 };

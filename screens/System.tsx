@@ -17,10 +17,11 @@ height: 100%;
 `;
 
 const MainContainer = styled(Container)`
-background-color: ${colors.secondary};
+background-color: ${colors.primary};
 justify-content: space-between;
 width: 100%;
 height: 100%;
+bottom: 5%;
 `;
 
 
@@ -32,7 +33,7 @@ const System: FunctionComponent = () => {
         <SystemContainer>
           <Navbar systUnderline={true} hardUnderline={false} dashUnderline={false}/>
           <MainContainer>
-          <Text style={styles.placeholder}>THIS IS A PLACEHOLDER</Text>
+          <Text>THIS IS A PLACEHOLDER</Text>
           </MainContainer>
           
         </SystemContainer>
