@@ -5,32 +5,44 @@ import * as Battery from 'expo-battery';
 //custom components
 import {Container} from "../components/shared";
 import {colors} from "../components/colors";
-import {StyleSheet, View,Text } from "react-native";
+import {StyleSheet, View,Text, ScrollView } from "react-native";
 import Navbar from "../components/Navbar";
-import expoSensors from 'expo-sensors'
-
-
+import { Accelerometer,Barometer,Gyroscope,Magnetometer,LightSensor,Pedometer } from "expo-sensors";
 
 
 const Hardware: FunctionComponent = () => {
   const [batteryState,setBatteryState] = useState("Unplugged");
   const [batteryLowPowerMode,setBatteryLowPowerMode] = useState(false);
   const [batteryLevel,setBatteryLevel] = useState("0");
-  const [isAcceleratorAvailable,SetAcceleratorAvailable] = useState("Checking");
-
+  const [isAcceleratorAvailable,setAcceleratorAvailable] = useState("Checking");
+  const [isBarometerAvailable,setBarometerAvailable] = useState("Checking");
+  const [isGyroscopeAvailable,setGyroscopeAvailable] = useState("Checking");
+  const [isMagnetometerAvailable,setMagnetometerAvailable] = useState("Checking");
+  const [isLightSensorAvailable,setLightSensorAvailable] = useState("Checking");
+  const [isPedometerAvailable,setPedometerAvailable] = useState("Checking");
   const twenty_seconds = 20000;
   
 
   useEffect(()=>{
     powerState()
     setInterval(function(){powerState()},twenty_seconds);
-    checkAcceleratorAvailable()
+    checkSensorsAvailable()
   })
 
-  const checkAcceleratorAvailable = async() => {
+  const checkSensorsAvailable = async () => {
     try {
-      let available = await expoSensors.Accelerometer.isAvailableAsync();
-    SetAcceleratorAvailable(String(available))
+    let accelerometerAvailable = await Accelerometer.isAvailableAsync()
+    let barometerAvailable = await Barometer.isAvailableAsync()
+    let gyroscopeAvailable = await Gyroscope.isAvailableAsync()
+    let lightSensorAvailable = await LightSensor.isAvailableAsync()
+    let magnetometerAvailable = await Magnetometer.isAvailableAsync()
+    let pedometerAvailable = await Pedometer.isAvailableAsync()
+    setAcceleratorAvailable(String(accelerometerAvailable))
+    setBarometerAvailable(String(barometerAvailable))
+    setGyroscopeAvailable(String(gyroscopeAvailable))
+    setLightSensorAvailable(String(lightSensorAvailable))
+    setMagnetometerAvailable(String(magnetometerAvailable))
+    setPedometerAvailable(String(pedometerAvailable))
     } catch (error) {
       console.log(error)
     }
@@ -52,11 +64,19 @@ const Hardware: FunctionComponent = () => {
   const batteryLevelFunction = async() =>
     { 
       let battery = await Battery.getBatteryLevelAsync()
+      if (battery != 1){
       battery = Math.round(battery * 100) / 100
       let stringBattery = battery.toString()  
       let formatedString = stringBattery.split('.')
+      if (parseInt(formatedString[1]) >= 10)
       setBatteryLevel("%" +formatedString[1]);
-      
+      else{
+        setBatteryLevel("%" + formatedString[1].substring(1));
+      }
+      }
+      else{
+        setBatteryLevel("%" + 100)
+      }
     };
 
   enum BatteryStateEnum {
@@ -102,11 +122,17 @@ const Hardware: FunctionComponent = () => {
           <Text style={styles.placeholder}>Battery Low Power Mode on: {batteryLowPowerMode ? "True":"False"}</Text>
           <Text style={styles.placeholder}>Battery State: {batteryState}</Text>
           </View>
-          <View style={styles.batterySection}>
-          <Text style={styles.title}>Accelerometer:</Text>
-
-          
+          <View style={styles.sensorsSection}>
+          <Text style={styles.title}>Sensors:</Text>
+          <Text style={styles.placeholder}> {isAcceleratorAvailable ? "The Accelerometer is available":"The Accelerometer is not available"} </Text>
+          <Text style={styles.placeholder}> {isBarometerAvailable ? "The Barometer is available":"The Barometer is not available"} </Text>
+          <Text style={styles.placeholder}> {isGyroscopeAvailable ? "The Gyroscope is available":"The Gyroscope is not available"} </Text>
+          <Text style={styles.placeholder}> {isMagnetometerAvailable ? "The Magnetometer is available":"The Magnetometer is not available"} </Text>
+          <Text style={styles.placeholder}> {isLightSensorAvailable ? "The LightSensor is available":"The LightSensor is not available"} </Text>
+          <Text style={styles.placeholder}> {isPedometerAvailable ? "The Pedometer is available":"The Pedometer is not available"} </Text>
           </View>
+          
+          
           </MainContainer>
         
         </HardwareContainer>
@@ -132,7 +158,13 @@ bottom: 5%;
 const styles = StyleSheet.create({
   batterySection:{
     justifyContent:"center",
-    margin:20,
+    margin:30,
+    backgroundColor:colors.blueSky,
+  },
+  sensorsSection:{
+    bottom:40,
+    justifyContent:"center",
+    margin:30,
     backgroundColor:colors.blueSky,
   },
   placeholder:{

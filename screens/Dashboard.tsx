@@ -82,9 +82,9 @@ bottom: 5%;
 
 const styles = StyleSheet.create({
   dashboardSection:{
-    justifyContent:"center",
-    margin:10,
+    margin:30,
     backgroundColor:colors.green,
+    top:80
   },
   placeholder:{
   padding:15,
