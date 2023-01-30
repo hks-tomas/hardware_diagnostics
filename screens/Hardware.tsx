@@ -7,22 +7,35 @@ import {Container} from "../components/shared";
 import {colors} from "../components/colors";
 import {StyleSheet, View,Text } from "react-native";
 import Navbar from "../components/Navbar";
-
+import expoSensors from 'expo-sensors'
 
 
 
 
 const Hardware: FunctionComponent = () => {
-  const [batteryState,setBatteryState] = useState(0);
+  const [batteryState,setBatteryState] = useState("Unplugged");
   const [batteryLowPowerMode,setBatteryLowPowerMode] = useState(false);
   const [batteryLevel,setBatteryLevel] = useState("0");
+  const [isAcceleratorAvailable,SetAcceleratorAvailable] = useState("Checking");
+
+  const twenty_seconds = 20000;
   
+
   useEffect(()=>{
     powerState()
-    batteryLevelFunction()
-    
+    setInterval(function(){powerState()},twenty_seconds);
+    checkAcceleratorAvailable()
   })
-  
+
+  const checkAcceleratorAvailable = async() => {
+    try {
+      let available = await expoSensors.Accelerometer.isAvailableAsync();
+    SetAcceleratorAvailable(String(available))
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
   
 
   const powerState = async () => {
@@ -30,10 +43,10 @@ const Hardware: FunctionComponent = () => {
     let batteryState : any = battery.batteryState;
     let batteryLowPowerMode : boolean = battery.lowPowerMode;
     
-    setBatteryState(batteryState)
+    batteryLevelFunction();
     setBatteryLowPowerMode(batteryLowPowerMode);
-    
-
+    getState()
+    return batteryState;
   }
 
   const batteryLevelFunction = async() =>
@@ -53,9 +66,11 @@ const Hardware: FunctionComponent = () => {
     Full = "Full"
   }
 
-  const getState = () => {
+  let batterystateNumber = powerState();
+
+  const getState = async () => {
     let result;
-    switch (batteryState) {
+    switch (await batterystateNumber) {
       
         case 1:
           result = BatteryStateEnum.Unplugged
@@ -71,7 +86,7 @@ const Hardware: FunctionComponent = () => {
         result = BatteryStateEnum.Unknown
         break;
     }
-    return result;
+    setBatteryState(result)
   }
   
 
@@ -85,13 +100,12 @@ const Hardware: FunctionComponent = () => {
           <Text style={styles.title}>BATTERY:</Text>
           <Text style={styles.placeholder}>Battery Level: {batteryLevel}</Text>
           <Text style={styles.placeholder}>Battery Low Power Mode on: {batteryLowPowerMode ? "True":"False"}</Text>
-          <Text style={styles.placeholder}>Battery State: {getState()}</Text>
+          <Text style={styles.placeholder}>Battery State: {batteryState}</Text>
           </View>
           <View style={styles.batterySection}>
-          <Text style={styles.title}>BATTERY:</Text>
-          <Text style={styles.placeholder}>Battery Level: {batteryLevel}</Text>
-          <Text style={styles.placeholder}>Battery Low Power Mode on: {batteryLowPowerMode ? "True":"False"}</Text>
-          <Text style={styles.placeholder}>Battery State: {getState()}</Text>
+          <Text style={styles.title}>Accelerometer:</Text>
+
+          
           </View>
           </MainContainer>
         

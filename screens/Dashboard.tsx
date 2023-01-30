@@ -2,7 +2,6 @@ import React, {FunctionComponent, useEffect,useState} from "react";
 import { StatusBar } from "expo-status-bar";
 import styled from "styled-components";
 import * as Device from 'expo-device';
-import * as Battery from 'expo-battery';
 //custom components
 import {Container} from "../components/shared";
 import {colors} from "../components/colors";
@@ -20,31 +19,30 @@ const Dashboard: FunctionComponent = () => {
   let DeviceModelName = Device.modelName;
   let DeviceBrand = Device.brand;
   
-  const [batteryLevel,setBatteryLevel] = useState("0");
+  
   const [mainScreenBrightness,setMainScreenBrightness] = useState("0");
 
   useEffect(()=>{
-    batteryLevelFunction()
     BrightnessLevelFunction()
   })
 
   const BrightnessLevelFunction = async() => {
-    let brightness = await Brightness.getBrightnessAsync()
+      let brightness = await Brightness.getBrightnessAsync()
+      if (brightness != 1){
       brightness = Math.round(brightness * 100) / 100
       let stringbrightness = brightness.toString()  
       let formatedString = stringbrightness.split('.')
-      setMainScreenBrightness("%" +formatedString[1]);
-  }
-
-  const batteryLevelFunction = async() =>
-    { 
-      let battery = await Battery.getBatteryLevelAsync()
-      battery = Math.round(battery * 100) / 100
-      let stringBattery = battery.toString()  
-      let formatedString = stringBattery.split('.')
-      setBatteryLevel("%" +formatedString[1]);
+      if (parseInt(formatedString[1]) >= 10)
+      setMainScreenBrightness("%" + formatedString[1]);
+      else{
+        setMainScreenBrightness("%" + formatedString[1].substring(1));
+      }
+      }
+      else{
+        setMainScreenBrightness("%" + 100)
+      }
       
-    };
+  }
 
     return(
         <>
@@ -58,7 +56,6 @@ const Dashboard: FunctionComponent = () => {
           <Text style={styles.placeholder}>Device Brand: {DeviceBrand}</Text>
           <Text style={styles.placeholder}>Device Model Name: {DeviceModelName}</Text>
           <Text style={styles.placeholder}>Year class: {DeviceYearClass}</Text>
-          <Text style={styles.placeholder}>Battery Level: {batteryLevel}</Text>
           <Text style={styles.placeholder}>Main Screen Brightness level: {mainScreenBrightness}</Text>
           </View>
           </MainContainer>
