@@ -10,15 +10,13 @@ import Navbar from "../components/Navbar";
 import * as Brightness from 'expo-brightness';
 
 const Dashboard: FunctionComponent = () => {
+  const [deviceType,setDeviceType] = useState("");
+  const [mainScreenBrightness,setMainScreenBrightness] = useState("0");
   const DeviceManufacturer = Device.manufacturer;
   const DeviceYearClass = Device.deviceYearClass;
   const DeviceModelName = Device.modelName;
   const DeviceBrand = Device.brand;
   
-  
-  
-  const [deviceType,setDeviceType] = useState("");
-  const [mainScreenBrightness,setMainScreenBrightness] = useState("0");
 
   useEffect(()=>{
     BrightnessLevelFunction()

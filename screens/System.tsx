@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react";
+import React, {useState,FunctionComponent,useEffect} from "react";
 import { StatusBar } from "expo-status-bar";
 import styled from "styled-components";
 
@@ -10,12 +10,30 @@ import Navbar from "../components/Navbar";
 import * as Device from 'expo-device';
 
 
+
 const System: FunctionComponent = () => {
-  
+  const [upTime, setUpTime] = useState("0");
   const test = Device.osBuildId;
   const DeviceOs = Device.osName;
   const apiLevel = Device.platformApiLevel;
   const cpuArquitectures = Device.supportedCpuArchitectures;
+
+  useEffect(()=>{
+    getDeviceUpTime()
+  })
+
+  const getDeviceUpTime = async() => {
+    let time = await Device.getUptimeAsync()
+    let minutesString = (String(time * 1.66667e-5))
+    let minutesArray = minutesString.split(".")
+    let minutes : any = minutesArray[0]
+    setUpTime(minutes);
+    
+  }
+
+   
+
+  
     return(
         <>
         <StatusBar style="light"/>
@@ -24,10 +42,11 @@ const System: FunctionComponent = () => {
           <MainContainer>
           <View style={styles.operatingSystemSection}>
             <Text style={styles.title}>Operating System Info:</Text>
-            <Text>Operating System of the device: {test}</Text>
-            <Text>Operating System of the device: {DeviceOs}</Text>
-            <Text>Operating System of the device: {apiLevel}</Text>
-            <Text>Operating System of the device: {cpuArquitectures}</Text>
+            <Text style={styles.placeholder}>Operating System of the device: {test}</Text>
+            <Text style={styles.placeholder}>Operating System of the device: {DeviceOs}</Text>
+            <Text style={styles.placeholder}>Operating System of the device: {apiLevel}</Text>
+            <Text style={styles.placeholder}>Operating System of the device: {cpuArquitectures}</Text>
+            <Text style={styles.placeholder}>Operating System Up Time (in minutes): {upTime}</Text>
           </View>
           </MainContainer>
           
@@ -40,7 +59,7 @@ const styles = StyleSheet.create({
   operatingSystemSection:{
     margin:30,
     backgroundColor:colors.red,
-    top:80
+    
   },
   placeholder:{
   padding:15,
