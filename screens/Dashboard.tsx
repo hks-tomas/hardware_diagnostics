@@ -9,24 +9,67 @@ import {StyleSheet, View,Text } from "react-native";
 import Navbar from "../components/Navbar";
 import * as Brightness from 'expo-brightness';
 
-
-
-
-
 const Dashboard: FunctionComponent = () => {
-  let DeviceManufacturer = Device.manufacturer;
-  let DeviceYearClass = Device.deviceYearClass;
-  let DeviceModelName = Device.modelName;
-  let DeviceBrand = Device.brand;
+  const DeviceManufacturer = Device.manufacturer;
+  const DeviceYearClass = Device.deviceYearClass;
+  const DeviceModelName = Device.modelName;
+  const DeviceBrand = Device.brand;
   
   
+  
+  const [deviceType,setDeviceType] = useState("");
   const [mainScreenBrightness,setMainScreenBrightness] = useState("0");
 
   useEffect(()=>{
     BrightnessLevelFunction()
+    getDeviceTypeString();
   })
 
-  const BrightnessLevelFunction = async() => {
+  enum DeviceTypeEnum {
+    Unknown = "Unknown" ,
+    Phone = "Phone",
+    Desktop = "Desktop",
+    Tablet = "Tablet",
+    TV = "TV"
+  }
+
+  const TypeOfDevice = async () => {
+    let dt : any = await Device.getDeviceTypeAsync()
+    return dt;
+  }
+
+  let deviceTypeId = TypeOfDevice();
+
+  const getDeviceTypeString = async () => {
+    let result;
+    switch (await deviceTypeId) {
+      
+        case 1:
+          result = DeviceTypeEnum.Phone
+        break;
+        case 2:
+          result = DeviceTypeEnum.Desktop
+        break;
+        case 3:
+          result = DeviceTypeEnum.Tablet
+        break;
+        case 4:
+          result = DeviceTypeEnum.TV
+        break;
+      
+      default:
+        result = DeviceTypeEnum.Unknown
+        break;
+    }
+    setDeviceType(result)
+  }
+
+
+  
+
+  
+
+  const BrightnessLevelFunction = async () => {
       let brightness = await Brightness.getBrightnessAsync()
       if (brightness != 1){
       brightness = Math.round(brightness * 100) / 100
@@ -43,7 +86,8 @@ const Dashboard: FunctionComponent = () => {
       }
       
   }
-
+  
+  
     return(
         <>
         <StatusBar style="light"/>
@@ -52,6 +96,7 @@ const Dashboard: FunctionComponent = () => {
           <MainContainer>
           <View style={styles.dashboardSection}>
           <Text style={styles.title}>Quick Info:</Text>
+          <Text style={styles.placeholder}>Device Type: {deviceType}</Text>
           <Text style={styles.placeholder}>Device Manufacturer: {DeviceManufacturer}</Text>
           <Text style={styles.placeholder}>Device Brand: {DeviceBrand}</Text>
           <Text style={styles.placeholder}>Device Model Name: {DeviceModelName}</Text>

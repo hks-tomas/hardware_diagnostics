@@ -5,7 +5,7 @@ import * as Battery from 'expo-battery';
 //custom components
 import {Container} from "../components/shared";
 import {colors} from "../components/colors";
-import {StyleSheet, View,Text, ScrollView } from "react-native";
+import {StyleSheet, View,Text } from "react-native";
 import Navbar from "../components/Navbar";
 import { Accelerometer,Barometer,Gyroscope,Magnetometer,LightSensor,Pedometer } from "expo-sensors";
 
