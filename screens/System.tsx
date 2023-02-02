@@ -13,10 +13,10 @@ import * as Device from 'expo-device';
 
 const System: FunctionComponent = () => {
   const [upTime, setUpTime] = useState("0");
-  const test = Device.osBuildId;
+  const buildId = Device.osBuildId;
   const DeviceOs = Device.osName;
-  const apiLevel = Device.platformApiLevel;
   const cpuArquitectures = Device.supportedCpuArchitectures;
+  const totalMemory = Device.totalMemory;
 
   useEffect(()=>{
     getDeviceUpTime()
@@ -31,6 +31,21 @@ const System: FunctionComponent = () => {
     
   }
 
+  const ReturnTotalMemoryGB = () => {
+    let totalMemoryGB = "";
+    let totalMemoryGBArray: string[] = []
+    if (totalMemory !== null){
+       totalMemoryGB = String(totalMemory * 1e-9);
+       totalMemoryGBArray = totalMemoryGB.split('.');
+       totalMemoryGB = totalMemoryGBArray[0] + '.' + totalMemoryGBArray[1].charAt(0) + " Gygabytes"
+     } 
+    else{
+       totalMemoryGB = "unknown"
+    }
+    return totalMemoryGB;
+  }
+
+   
    
 
   
@@ -42,11 +57,12 @@ const System: FunctionComponent = () => {
           <MainContainer>
           <View style={styles.operatingSystemSection}>
             <Text style={styles.title}>Operating System Info:</Text>
-            <Text style={styles.placeholder}>Operating System of the device: {test}</Text>
             <Text style={styles.placeholder}>Operating System of the device: {DeviceOs}</Text>
-            <Text style={styles.placeholder}>Operating System of the device: {apiLevel}</Text>
-            <Text style={styles.placeholder}>Operating System of the device: {cpuArquitectures}</Text>
+            <Text style={styles.placeholder}>Operating System BuildID: {buildId}</Text>
+            <Text style={styles.placeholder}>Supported CPU arquitectures of the device: {cpuArquitectures}</Text>
             <Text style={styles.placeholder}>Operating System Up Time (in minutes): {upTime}</Text>
+            <Text style={styles.placeholder}>Total memory of the device (in Gigabytes): {ReturnTotalMemoryGB()}</Text>
+
           </View>
           </MainContainer>
           
